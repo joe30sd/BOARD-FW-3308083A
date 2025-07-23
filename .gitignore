@@ -1,0 +1,67 @@
+# Arduino IDE build folders
+*.ino.cpp
+*.o
+*.d
+*.elf
+*.hex
+*.bin
+*.eep
+*.map
+*.lst
+
+# Arduino sketchbook backups and autosaves
+*~ 
+*.bak
+*.tmp
+*.swp
+
+# Mac OS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Arduino IDE metadata
+/.arduino*
+/*.code-workspace
+
+# PlatformIO
+.pio/
+.vscode/
+*.pyc
+__pycache__/
+.env/
+.env.*
+
+# Compiled core files
+/core/
+build/
+
+# Library dependencies (if using libraries folder inside project)
+libraries/*/
+!libraries/.gitkeep
+
+# Board-specific settings
+*.partitions.csv
+*.bootloader.bin
+*.sdkconfig
+sdkconfig.old
+sdkconfig
+
+# CLion or JetBrains IDEs
+.idea/
+
+# ESP specific
+*.log
+*.bin
+*.elf
+*.map
+*.project
+*.sconsign.dblite
+
+# Miscellaneous
+*.log
+*.orig
+*.rej
