@@ -656,7 +656,7 @@ void loop() {
 
 
 
-      if (minutesPassed > 2) {
+      if (minutesPassed > 3) {
         magnet_current = 2.00;
         magnet_voltage = u_voltage;
         up_done = 3;
