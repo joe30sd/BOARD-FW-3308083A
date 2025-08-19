@@ -2,6 +2,11 @@
 #include <Wire.h>
 
 #include "config.h"
+
+// Define global constants from config.h
+const char* ssid = "Modric";
+const char* password = "arctic9744";
+const char* firmwareUrl = "https://raw.githubusercontent.com/byronin/rnn-bins/main/firmware2.bin";
 #include "relay_control.h"
 #include "adc_sensor.h"
 #include "tdk_communication.h"

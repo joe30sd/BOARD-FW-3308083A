@@ -2,8 +2,8 @@
 #define CONFIG_H
 
 // WiFi Configuration
-const char* ssid = "Modric";
-const char* password = "arctic9744";
+extern const char* ssid;
+extern const char* password;
 
 // Pin Definitions
 #define RXD2 16
@@ -27,6 +27,6 @@ const float R1 = 2000.0;
 const int adcMaxValue = 17800;
 
 // OTA Configuration
-const char* firmwareUrl = "https://raw.githubusercontent.com/byronin/rnn-bins/main/firmware2.bin";
+extern const char* firmwareUrl;
 
 #endif
