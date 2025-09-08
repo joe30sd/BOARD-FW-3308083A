@@ -10,6 +10,8 @@
 #include <HTTPClient.h>
 #include <Update.h>
 HardwareSerial SerialPort(2);  // use UART2
+#include <WiFiClientSecure.h>
+
 
 const char* ssid = "mpsone";
 const char* password = "mpsone1234";
@@ -1028,78 +1030,74 @@ void Send_values() {
 
 void performOTAUpdate() {
   // Step 1: Connect to WiFi
-    Serial2.print("YD");
-    Serial2.println(51);
+  Serial2.print("YD"); Serial2.println(51);
   Serial.println("Connecting to WiFi...");
   WiFi.begin(ssid, password);
-  
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
+  while (WiFi.status() != WL_CONNECTED) { delay(500); Serial.print("."); }
   Serial.println("\nConnected to WiFi");
 
-  // Step 2: Download and apply firmware
+  // Step 2: HTTPS download (GitHub redirects to objects.githubusercontent.com)
+  WiFiClientSecure client;
+
+  // Quick start (skips certificate validation — OK for testing, not for production)
+  client.setInsecure();
+
+  // For production, replace the line above with time sync + client.setCACert(...)
+
   HTTPClient http;
-  
-  // Initialize HTTP client with the firmware URL
-  http.begin(firmwareUrl);
-  
-  // Send GET request
+  http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS); // handle /releases/latest redirect chain
+  http.setTimeout(30000);                                  // 30s per operation
+  if (!http.begin(client, firmwareUrl)) {
+    Serial.println("HTTP begin() failed");
+    Serial2.print("YD"); Serial2.println(53);
+    return;
+  }
+
   int httpCode = http.GET();
-  
-  if (httpCode == HTTP_CODE_OK) { // HTTP 200
-    int contentLength = http.getSize();
-    
-    if (contentLength > 0) {
-      // Prepare OTA update with the firmware size
-      bool canBegin = Update.begin(contentLength);
-      
-      if (canBegin) {
-        Serial.println("Starting OTA update...");
-        WiFiClient* stream = http.getStreamPtr();
-        
-        // Write the firmware stream to the Update library
-        size_t written = Update.writeStream(*stream);
-        
-        if (written == contentLength) {
-          Serial.println("Written : " + String(written) + " bytes successfully");
-        } else {
-          Serial.println("Written only : " + String(written) + "/" + String(contentLength) + " bytes");
-          http.end();
-          return;
-        }
-        
-        // Finalize the update
-        if (Update.end()) {
-          Serial.println("OTA update completed!");
-              Serial2.print("YD");
-            Serial2.println(52);
-          if (Update.isFinished()) {
-            Serial.println("Update successful. Rebooting...");
-            ESP.restart(); // Restart ESP32 to boot into new firmware
-          } else {
-            Serial.println("Update not finished. Something went wrong!");
-          }
-        } else {
-          Serial.println("Update error: #" + String(Update.getError()));
-          Serial2.print("YD");
-          Serial2.println(53);
-        }
+  if (httpCode == HTTP_CODE_OK) {
+    int contentLength = http.getSize(); // may be -1 for chunked
+
+    bool canBegin = (contentLength > 0) ? Update.begin(contentLength)
+                                        : Update.begin(UPDATE_SIZE_UNKNOWN);
+    if (!canBegin) {
+      Serial.println("Not enough space to begin OTA update");
+      Serial2.print("YD"); Serial2.println(53);
+      http.end();
+      return;
+    }
+
+    Serial.println("Starting OTA update...");
+    WiFiClient* stream = http.getStreamPtr();
+    size_t written = Update.writeStream(*stream);
+
+    if ((contentLength > 0 && written == (size_t)contentLength) ||
+        (contentLength <= 0 && written > 0)) {
+      Serial.println("Written : " + String(written) + " bytes successfully");
+    } else {
+      Serial.println("Written only : " + String(written) + "/" + String(contentLength));
+      http.end();
+      return;
+    }
+
+    if (Update.end()) {
+      Serial.println("OTA update completed!");
+      Serial2.print("YD"); Serial2.println(52);
+      if (Update.isFinished()) {
+        Serial.println("Update successful. Rebooting...");
+        http.end();
+        ESP.restart();
       } else {
-        Serial.println("Not enough space to begin OTA update");
-        Serial2.print("YD");
-          Serial2.println(53);
+        Serial.println("Update not finished. Something went wrong!");
       }
     } else {
-      Serial.println("Firmware size is invalid (<= 0)");
+      Serial.println("Update error: #" + String(Update.getError()));
+      Serial2.print("YD"); Serial2.println(53);
     }
   } else {
     Serial.println("HTTP error: " + String(httpCode));
-    Serial2.print("YD");
-     Serial2.println(53);
+    Serial2.print("YD"); Serial2.println(53);
   }
-  
-  // Clean up
+
   http.end();
 }
+
