@@ -26,7 +26,7 @@ const char* password = "mpsone1234";
 #define RDA_relay_pin 12
 #define MAIN_relay_pin 14
 
-const char* firmwareUrl = "https://raw.githubusercontent.com/byronin/rnn-bins/main/firmware2.bin";
+const char* firmwareUrl = "https://github.com/joe30sd/BOARD-FW-3308083A/releases/latest/download/TDK_PSU_main.ino.bin";
 
 
 unsigned long previousMillis = 0, pvm1 = 0, pvm2 = 0, pvm3 = 0, diag_pvm = 0;
