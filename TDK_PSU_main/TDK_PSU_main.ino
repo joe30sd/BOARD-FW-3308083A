@@ -1,3 +1,8 @@
+//  V1.01        added ramp up 3 Min after relays Close   YB
+//  ramp Up : Turn on Relay , 4 min delay, increase current to target ,  park, 2 min delay, close Relay , waith 3 min, Decrease current to zero
+//
+//
+//
 #include <Arduino.h>
 #include <Wire.h>
 #include <Adafruit_ADS1X15.h>
@@ -6,8 +11,8 @@
 #include <Update.h>
 HardwareSerial SerialPort(2);  // use UART2
 
-const char* ssid = "Modric";
-const char* password = "arctic9744";
+const char* ssid = "mpsone";
+const char* password = "mpsone1234";
  
 #define RXD2 16
 #define TXD2 17
@@ -656,7 +661,7 @@ void loop() {
 
 
 
-      if (minutesPassed > 3) {
+      if (minutesPassed > 3) {                 // change this 3 to 4 YB  this is where current starts incressing . after 4 mins.   
         magnet_current = 2.00;
         magnet_voltage = u_voltage;
         up_done = 3;
@@ -686,13 +691,14 @@ void loop() {
       up_done = 7;
       previousMillis = currentMillis;
       minutesPassed = 0;
-    } else if (up_mode == 8 && minutesPassed > 1) {
+    } else if (up_mode == 8 && minutesPassed > 1) {    //change 1 to 3  . this is before relays are open no need to wait 3 min
       att_relay = 0;
       main_relay = 0;
       rda_relay = 0;
       Set_Relay(0, 0, 0);
-      if(minutesPassed > 3){
+      if(minutesPassed > 3){    //change 3 to 4  this is where axial and main still open . no need to wait 4 minutes
         up_done = 8;
+        delay(60000);  // added YB to test 3 Min   // REACHED 3 MIN GOAL
       }
       
     } else if (up_mode == 9) {
@@ -744,7 +750,7 @@ void loop() {
 
     } else if (d_mode == 3) {
 
-      if (minutesPassed > 2) {
+      if (minutesPassed > 2) {   // change 2 to 3 YB  not here either
         d_mode = 4;
         
         Serial2.println("DM4");
@@ -780,6 +786,7 @@ void loop() {
         Serial2.println("DM5");
       }
     } else if (d_mode == 8) {
+        delay(60000);    // added YB  to increase delay to 3 min.addming delay ddint help with 3 min goal either     . REACHED 3 MIN GOAL
     }
   }
 }
