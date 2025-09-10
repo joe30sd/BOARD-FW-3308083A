@@ -700,7 +700,7 @@ void loop() {
       Set_Relay(0, 0, 0);
       if(minutesPassed > 3){    //change 3 to 4  this is where axial and main still open . no need to wait 4 minutes
         up_done = 8;
-        delay(60000);  // added YB to test 3 Min   // REACHED 3 MIN GOAL
+        delay(180000);  // Fixed: 3 Min delay for park cooldown
       }
       
     } else if (up_mode == 9) {
@@ -788,7 +788,7 @@ void loop() {
         Serial2.println("DM5");
       }
     } else if (d_mode == 8) {
-        delay(60000);    // added YB  to increase delay to 3 min.addming delay ddint help with 3 min goal either     . REACHED 3 MIN GOAL
+        delay(180000);    // Fixed: 3 Min delay for park cooldown
     }
   }
 }
