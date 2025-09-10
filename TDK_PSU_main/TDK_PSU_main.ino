@@ -700,6 +700,7 @@ void loop() {
       Set_Relay(0, 0, 0);
       if(minutesPassed > 3){
         up_done = 8;
+        delay(60000);  // added YB to test 3 Min   // REACHED 3 MIN GOAL
       }
       
     } else if (up_mode == 9) {
@@ -787,6 +788,7 @@ void loop() {
         Serial2.println("DM5");
       }
     } else if (d_mode == 8) {
+       delay(60000);    // added YB  to increase delay to 3 min.addming delay ddint help with 3 min goal either     . REACHED 3 MIN GOAL
     }
   }
 }
