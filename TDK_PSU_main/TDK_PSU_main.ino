@@ -779,7 +779,7 @@ void loop() {
        Set_Relay(0, 0, 0);
       }
     } else if (d_mode == 5) {
-      if (minutesPassed >  dm4timer + 3) {
+      if (minutesPassed >  dm4timer + 2) {
         d_mode = 0;
         Set_Relay(0, 0, 0);
         Set_CV(0, 0);
