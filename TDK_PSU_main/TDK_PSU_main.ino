@@ -663,7 +663,7 @@ void loop() {
 
 
 
-      if (minutesPassed > 3) {                 // change this 3 to 4 YB  this is where current starts incressing . after 4 mins.   
+      if (minutesPassed > 2) {
         magnet_current = 2.00;
         magnet_voltage = u_voltage;
         up_done = 3;
@@ -693,14 +693,13 @@ void loop() {
       up_done = 7;
       previousMillis = currentMillis;
       minutesPassed = 0;
-    } else if (up_mode == 8 && minutesPassed > 1) {    //change 1 to 3  . this is before relays are open no need to wait 3 min
+    } else if (up_mode == 8 && minutesPassed > 1) {
       att_relay = 0;
       main_relay = 0;
       rda_relay = 0;
       Set_Relay(0, 0, 0);
-      if(minutesPassed > 3){    //change 3 to 4  this is where axial and main still open . no need to wait 4 minutes
+      if(minutesPassed > 3){
         up_done = 8;
-        delay(180000);  // Fixed: 3 Min delay for park cooldown
       }
       
     } else if (up_mode == 9) {
@@ -752,7 +751,7 @@ void loop() {
 
     } else if (d_mode == 3) {
 
-      if (minutesPassed > 2) {   // change 2 to 3 YB  not here either
+      if (minutesPassed > 2) {
         d_mode = 4;
         
         Serial2.println("DM4");
@@ -788,7 +787,6 @@ void loop() {
         Serial2.println("DM5");
       }
     } else if (d_mode == 8) {
-        delay(180000);    // Fixed: 3 Min delay for park cooldown
     }
   }
 }
