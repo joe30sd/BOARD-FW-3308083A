@@ -4,7 +4,6 @@
 *.d
 *.elf
 *.hex
-*.bin
 *.eep
 *.map
 *.lst
@@ -45,7 +44,6 @@ libraries/*/
 
 # Board-specific settings
 *.partitions.csv
-*.bootloader.bin
 *.sdkconfig
 sdkconfig.old
 sdkconfig
@@ -55,7 +53,6 @@ sdkconfig
 
 # ESP specific
 *.log
-*.bin
 *.elf
 *.map
 *.project
